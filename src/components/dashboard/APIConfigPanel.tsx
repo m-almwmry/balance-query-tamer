@@ -53,8 +53,8 @@ const APIConfigPanel = () => {
   const handleAddConfig = () => {
     if (!newConfig.name || !newConfig.url) {
       toast({
-        title: "Required fields missing",
-        description: "Name and URL are required",
+        title: "الحقول المطلوبة مفقودة",
+        description: "الاسم وعنوان URL مطلوبان",
         variant: "destructive",
       });
       return;
@@ -83,8 +83,8 @@ const APIConfigPanel = () => {
 
     if (!editConfig.name || !editConfig.url) {
       toast({
-        title: "Required fields missing",
-        description: "Name and URL are required",
+        title: "الحقول المطلوبة مفقودة",
+        description: "الاسم وعنوان URL مطلوبان",
         variant: "destructive",
       });
       return;
@@ -119,13 +119,13 @@ const APIConfigPanel = () => {
     <AnimatedCard className="p-6">
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">API Configurations</h2>
+          <h2 className="text-2xl font-semibold">إعدادات واجهة API</h2>
           <Button 
             onClick={() => setIsAddingConfig(true)}
             disabled={isAddingConfig}
           >
-            <Plus size={16} className="mr-2" />
-            Add API
+            <Plus size={16} className="ml-2" />
+            إضافة API
           </Button>
         </div>
 
@@ -137,23 +137,23 @@ const APIConfigPanel = () => {
             exit={{ opacity: 0, y: 20 }}
             className="bg-muted/30 rounded-lg p-4 border border-border"
           >
-            <h3 className="text-sm font-medium mb-3">Add New API</h3>
+            <h3 className="text-sm font-medium mb-3">إضافة API جديد</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="name" className="font-medium">
-                    Name <span className="text-destructive">*</span>
+                    الاسم <span className="text-destructive">*</span>
                   </label>
                   <Input
                     id="name"
-                    placeholder="API name"
+                    placeholder="اسم API"
                     value={newConfig.name}
                     onChange={(e) => setNewConfig({ ...newConfig, name: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="url" className="font-medium">
-                    URL <span className="text-destructive">*</span>
+                    عنوان URL <span className="text-destructive">*</span>
                   </label>
                   <Input
                     id="url"
@@ -166,20 +166,20 @@ const APIConfigPanel = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label htmlFor="username" className="font-medium">Username</label>
+                  <label htmlFor="username" className="font-medium">اسم المستخدم</label>
                   <Input
                     id="username"
-                    placeholder="Username (optional)"
+                    placeholder="اسم المستخدم (اختياري)"
                     value={newConfig.username}
                     onChange={(e) => setNewConfig({ ...newConfig, username: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="password" className="font-medium">Password</label>
+                  <label htmlFor="password" className="font-medium">كلمة المرور</label>
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Password (optional)"
+                    placeholder="كلمة المرور (اختيارية)"
                     value={newConfig.password}
                     onChange={(e) => setNewConfig({ ...newConfig, password: e.target.value })}
                   />
@@ -188,12 +188,12 @@ const APIConfigPanel = () => {
               
               <div className="flex gap-2">
                 <Button onClick={handleAddConfig}>
-                  <Check size={16} className="mr-2" />
-                  Save
+                  <Check size={16} className="ml-2" />
+                  حفظ
                 </Button>
                 <Button variant="outline" onClick={resetNewConfig}>
-                  <X size={16} className="mr-2" />
-                  Cancel
+                  <X size={16} className="ml-2" />
+                  إلغاء
                 </Button>
               </div>
             </div>
@@ -202,11 +202,11 @@ const APIConfigPanel = () => {
 
         {/* API Configs List */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Configured APIs</h3>
+          <h3 className="text-sm font-medium">واجهات API المكونة</h3>
           
           {apiConfigs.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-border">
-              No API configurations yet. Add your first API using the button above.
+              لا توجد إعدادات API بعد. أضف أول API باستخدام الزر أعلاه.
             </div>
           ) : (
             <motion.div
@@ -242,7 +242,7 @@ const APIConfigPanel = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label htmlFor={`edit-name-${config.id}`} className="font-medium">
-                            Name <span className="text-destructive">*</span>
+                            الاسم <span className="text-destructive">*</span>
                           </label>
                           <Input
                             id={`edit-name-${config.id}`}
@@ -252,7 +252,7 @@ const APIConfigPanel = () => {
                         </div>
                         <div className="space-y-2">
                           <label htmlFor={`edit-url-${config.id}`} className="font-medium">
-                            URL <span className="text-destructive">*</span>
+                            عنوان URL <span className="text-destructive">*</span>
                           </label>
                           <Input
                             id={`edit-url-${config.id}`}
@@ -264,7 +264,7 @@ const APIConfigPanel = () => {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label htmlFor={`edit-username-${config.id}`} className="font-medium">Username</label>
+                          <label htmlFor={`edit-username-${config.id}`} className="font-medium">اسم المستخدم</label>
                           <Input
                             id={`edit-username-${config.id}`}
                             value={editConfig.username}
@@ -272,25 +272,25 @@ const APIConfigPanel = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label htmlFor={`edit-password-${config.id}`} className="font-medium">Password</label>
+                          <label htmlFor={`edit-password-${config.id}`} className="font-medium">كلمة المرور</label>
                           <Input
                             id={`edit-password-${config.id}`}
                             type="password"
                             value={editConfig.password}
                             onChange={(e) => setEditConfig({ ...editConfig, password: e.target.value })}
-                            placeholder="Leave empty to keep current password"
+                            placeholder="اترك فارغًا للاحتفاظ بكلمة المرور الحالية"
                           />
                         </div>
                       </div>
                       
                       <div className="flex gap-2">
                         <Button size="sm" onClick={handleSaveEdit}>
-                          <Check size={16} className="mr-2" />
-                          Save
+                          <Check size={16} className="ml-2" />
+                          حفظ
                         </Button>
                         <Button size="sm" variant="outline" onClick={handleCancelEdit}>
-                          <X size={16} className="mr-2" />
-                          Cancel
+                          <X size={16} className="ml-2" />
+                          إلغاء
                         </Button>
                       </div>
                     </div>
@@ -302,14 +302,14 @@ const APIConfigPanel = () => {
                           <h4 className="font-medium">{config.name}</h4>
                           <Badge 
                             variant={config.isActive ? "default" : "outline"} 
-                            className="ml-3"
+                            className="mr-3"
                           >
-                            {config.isActive ? "Active" : "Inactive"}
+                            {config.isActive ? "نشط" : "غير نشط"}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">{config.url}</p>
                         {config.username && (
-                          <p className="text-xs text-muted-foreground">Username: {config.username}</p>
+                          <p className="text-xs text-muted-foreground">اسم المستخدم: {config.username}</p>
                         )}
                       </div>
                       <div className="flex gap-2 mt-2 md:mt-0">
@@ -355,11 +355,11 @@ const APIConfigPanel = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete API Configuration</DialogTitle>
+            <DialogTitle>حذف إعداد API</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the API configuration{' '}
-              <span className="font-medium">{configToDelete?.name}</span>?
-              This action cannot be undone.
+              هل أنت متأكد من رغبتك في حذف إعداد API{' '}
+              <span className="font-medium">{configToDelete?.name}</span>؟
+              لا يمكن التراجع عن هذا الإجراء.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -367,13 +367,13 @@ const APIConfigPanel = () => {
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button
               variant="destructive"
               onClick={handleConfirmDelete}
             >
-              Delete
+              حذف
             </Button>
           </DialogFooter>
         </DialogContent>

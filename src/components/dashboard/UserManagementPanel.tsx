@@ -55,8 +55,8 @@ const UserManagementPanel = () => {
   const handleAddUser = () => {
     if (!newUser.username) {
       toast({
-        title: "Username required",
-        description: "Please enter a username",
+        title: "اسم المستخدم مطلوب",
+        description: "الرجاء إدخال اسم مستخدم",
         variant: "destructive",
       });
       return;
@@ -69,8 +69,8 @@ const UserManagementPanel = () => {
 
     if (exists) {
       toast({
-        title: "Username already exists",
-        description: "Please choose a different username",
+        title: "اسم المستخدم موجود بالفعل",
+        description: "الرجاء اختيار اسم مستخدم مختلف",
         variant: "destructive",
       });
       return;
@@ -95,8 +95,8 @@ const UserManagementPanel = () => {
 
     if (!editUser.username) {
       toast({
-        title: "Username required",
-        description: "Please enter a username",
+        title: "اسم المستخدم مطلوب",
+        description: "الرجاء إدخال اسم مستخدم",
         variant: "destructive",
       });
       return;
@@ -111,8 +111,8 @@ const UserManagementPanel = () => {
 
     if (exists) {
       toast({
-        title: "Username already exists",
-        description: "Please choose a different username",
+        title: "اسم المستخدم موجود بالفعل",
+        description: "الرجاء اختيار اسم مستخدم مختلف",
         variant: "destructive",
       });
       return;
@@ -147,13 +147,13 @@ const UserManagementPanel = () => {
     <AnimatedCard className="p-6">
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">User Management</h2>
+          <h2 className="text-2xl font-semibold">إدارة المستخدمين</h2>
           <Button 
             onClick={() => setIsAddingUser(true)}
             disabled={isAddingUser}
           >
-            <Plus size={16} className="mr-2" />
-            Add User
+            <Plus size={16} className="ml-2" />
+            إضافة مستخدم
           </Button>
         </div>
 
@@ -165,16 +165,16 @@ const UserManagementPanel = () => {
             exit={{ opacity: 0, y: 20 }}
             className="bg-muted/30 rounded-lg p-4 border border-border"
           >
-            <h3 className="text-sm font-medium mb-3">Add New User</h3>
+            <h3 className="text-sm font-medium mb-3">إضافة مستخدم جديد</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="username" className="font-medium">
-                    Username <span className="text-destructive">*</span>
+                    اسم المستخدم <span className="text-destructive">*</span>
                   </label>
                   <Input
                     id="username"
-                    placeholder="Enter username"
+                    placeholder="أدخل اسم المستخدم"
                     value={newUser.username}
                     onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                   />
@@ -185,7 +185,7 @@ const UserManagementPanel = () => {
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between mb-2">
-                      <label htmlFor="maxNumbers" className="font-medium">Maximum Numbers</label>
+                      <label htmlFor="maxNumbers" className="font-medium">الحد الأقصى للأرقام</label>
                       <span className="text-sm">{newUser.maxNumbers}</span>
                     </div>
                     <Slider 
@@ -201,7 +201,7 @@ const UserManagementPanel = () => {
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between mb-2">
-                      <label htmlFor="sessionLength" className="font-medium">Session Length (hours)</label>
+                      <label htmlFor="sessionLength" className="font-medium">مدة الجلسة (ساعات)</label>
                       <span className="text-sm">{newUser.sessionLength}</span>
                     </div>
                     <Slider 
@@ -218,12 +218,12 @@ const UserManagementPanel = () => {
               
               <div className="flex gap-2">
                 <Button onClick={handleAddUser}>
-                  <Check size={16} className="mr-2" />
-                  Save
+                  <Check size={16} className="ml-2" />
+                  حفظ
                 </Button>
                 <Button variant="outline" onClick={resetNewUser}>
-                  <X size={16} className="mr-2" />
-                  Cancel
+                  <X size={16} className="ml-2" />
+                  إلغاء
                 </Button>
               </div>
             </div>
@@ -232,11 +232,11 @@ const UserManagementPanel = () => {
 
         {/* Users List */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Configured Users</h3>
+          <h3 className="text-sm font-medium">المستخدمون المكونون</h3>
           
           {userConfigs.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-border">
-              No user configurations yet. Add your first user using the button above.
+              لا توجد تكوينات مستخدمين حتى الآن. أضف أول مستخدم باستخدام الزر أعلاه.
             </div>
           ) : (
             <motion.div
@@ -272,7 +272,7 @@ const UserManagementPanel = () => {
                       <div className="grid grid-cols-1 gap-4">
                         <div className="space-y-2">
                           <label htmlFor={`edit-username-${config.id}`} className="font-medium">
-                            Username <span className="text-destructive">*</span>
+                            اسم المستخدم <span className="text-destructive">*</span>
                           </label>
                           <Input
                             id={`edit-username-${config.id}`}
@@ -286,7 +286,7 @@ const UserManagementPanel = () => {
                         <div className="space-y-4">
                           <div>
                             <div className="flex justify-between mb-2">
-                              <label htmlFor={`edit-maxNumbers-${config.id}`} className="font-medium">Maximum Numbers</label>
+                              <label htmlFor={`edit-maxNumbers-${config.id}`} className="font-medium">الحد الأقصى للأرقام</label>
                               <span className="text-sm">{editUser.maxNumbers}</span>
                             </div>
                             <Slider 
@@ -302,7 +302,7 @@ const UserManagementPanel = () => {
                         <div className="space-y-4">
                           <div>
                             <div className="flex justify-between mb-2">
-                              <label htmlFor={`edit-sessionLength-${config.id}`} className="font-medium">Session Length (hours)</label>
+                              <label htmlFor={`edit-sessionLength-${config.id}`} className="font-medium">مدة الجلسة (ساعات)</label>
                               <span className="text-sm">{editUser.sessionLength}</span>
                             </div>
                             <Slider 
@@ -319,12 +319,12 @@ const UserManagementPanel = () => {
                       
                       <div className="flex gap-2">
                         <Button size="sm" onClick={handleSaveEdit}>
-                          <Check size={16} className="mr-2" />
-                          Save
+                          <Check size={16} className="ml-2" />
+                          حفظ
                         </Button>
                         <Button size="sm" variant="outline" onClick={handleCancelEdit}>
-                          <X size={16} className="mr-2" />
-                          Cancel
+                          <X size={16} className="ml-2" />
+                          إلغاء
                         </Button>
                       </div>
                     </div>
@@ -336,19 +336,19 @@ const UserManagementPanel = () => {
                           <h4 className="font-medium">{config.username}</h4>
                           <Badge 
                             variant={config.isActive ? "default" : "outline"} 
-                            className="ml-3"
+                            className="mr-3"
                           >
-                            {config.isActive ? "Active" : "Inactive"}
+                            {config.isActive ? "نشط" : "غير نشط"}
                           </Badge>
                         </div>
                         <div className="flex flex-col md:flex-row gap-1 md:gap-6">
                           <div className="flex items-center text-sm text-muted-foreground">
-                            <Plus size={14} className="mr-1" />
-                            Max Numbers: {config.maxNumbers}
+                            <Plus size={14} className="ml-1" />
+                            أقصى عدد للأرقام: {config.maxNumbers}
                           </div>
                           <div className="flex items-center text-sm text-muted-foreground">
-                            <Clock size={14} className="mr-1" />
-                            Session: {config.sessionLength} hours
+                            <Clock size={14} className="ml-1" />
+                            مدة الجلسة: {config.sessionLength} ساعات
                           </div>
                         </div>
                       </div>
@@ -394,11 +394,11 @@ const UserManagementPanel = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
+            <DialogTitle>حذف المستخدم</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the user{' '}
-              <span className="font-medium">{userToDelete?.username}</span>?
-              This action cannot be undone.
+              هل أنت متأكد من رغبتك في حذف المستخدم{' '}
+              <span className="font-medium">{userToDelete?.username}</span>؟
+              لا يمكن التراجع عن هذا الإجراء.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -406,13 +406,13 @@ const UserManagementPanel = () => {
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button
               variant="destructive"
               onClick={handleConfirmDelete}
             >
-              Delete
+              حذف
             </Button>
           </DialogFooter>
         </DialogContent>

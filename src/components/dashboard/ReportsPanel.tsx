@@ -47,21 +47,21 @@ const ReportsPanel = () => {
       if (report) {
         setReports(ReportService.getReports());
         toast({
-          title: "Report generated",
-          description: `${report.title} has been generated successfully.`,
+          title: "تم إنشاء التقرير",
+          description: `تم إنشاء ${report.title} بنجاح.`,
         });
       } else {
         toast({
-          title: "Report generation failed",
-          description: "No data available for the selected period.",
+          title: "فشل إنشاء التقرير",
+          description: "لا توجد بيانات متاحة للفترة المحددة.",
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error("Report generation error:", error);
       toast({
-        title: "Report generation failed",
-        description: "An error occurred while generating the report.",
+        title: "فشل إنشاء التقرير",
+        description: "حدث خطأ أثناء إنشاء التقرير.",
         variant: "destructive",
       });
     } finally {
@@ -82,8 +82,8 @@ const ReportsPanel = () => {
       setReportToDelete(null);
       
       toast({
-        title: "Report deleted",
-        description: "The report has been deleted successfully.",
+        title: "تم حذف التقرير",
+        description: "تم حذف التقرير بنجاح.",
       });
     }
   };
@@ -117,14 +117,14 @@ const ReportsPanel = () => {
       document.body.removeChild(a);
       
       toast({
-        title: "Report downloaded",
-        description: "The report has been downloaded successfully.",
+        title: "تم تنزيل التقرير",
+        description: "تم تنزيل التقرير بنجاح.",
       });
     } catch (error) {
       console.error("Download error:", error);
       toast({
-        title: "Download failed",
-        description: "An error occurred while downloading the report.",
+        title: "فشل التنزيل",
+        description: "حدث خطأ أثناء تنزيل التقرير.",
         variant: "destructive",
       });
     }
@@ -134,19 +134,19 @@ const ReportsPanel = () => {
     <AnimatedCard className="p-6">
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">Balance Reports</h2>
+          <h2 className="text-2xl font-semibold">تقارير الرصيد</h2>
           <div className="flex gap-2">
             <Select
               value={reportPeriod}
               onValueChange={(value: "day" | "week" | "month") => setReportPeriod(value)}
             >
               <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Period" />
+                <SelectValue placeholder="الفترة" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="day">Day</SelectItem>
-                <SelectItem value="week">Week</SelectItem>
-                <SelectItem value="month">Month</SelectItem>
+                <SelectItem value="day">يوم</SelectItem>
+                <SelectItem value="week">أسبوع</SelectItem>
+                <SelectItem value="month">شهر</SelectItem>
               </SelectContent>
             </Select>
             <Button 
@@ -154,22 +154,22 @@ const ReportsPanel = () => {
               disabled={isGenerating}
             >
               {isGenerating ? (
-                <RefreshCw size={16} className="mr-2 animate-spin" />
+                <RefreshCw size={16} className="ml-2 animate-spin" />
               ) : (
-                <FileText size={16} className="mr-2" />
+                <FileText size={16} className="ml-2" />
               )}
-              Generate Report
+              إنشاء تقرير
             </Button>
           </div>
         </div>
 
         {/* Reports List */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Recent Reports</h3>
+          <h3 className="text-sm font-medium">التقارير الأخيرة</h3>
           
           {reports.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-border">
-              No reports generated yet. Generate your first report using the button above.
+              لم يتم إنشاء تقارير بعد. قم بإنشاء أول تقرير باستخدام الزر أعلاه.
             </div>
           ) : (
             <motion.div
@@ -220,7 +220,7 @@ const ReportsPanel = () => {
                         <div>
                           <h4 className="font-medium">{report.title}</h4>
                           <p className="text-xs text-muted-foreground">
-                            Generated: {formatDate(report.timestamp)}
+                            تم الإنشاء: {formatDate(report.timestamp)}
                           </p>
                         </div>
                       </div>
@@ -257,40 +257,40 @@ const ReportsPanel = () => {
                       <div className="space-y-4">
                         {/* Summary Section */}
                         <div className="space-y-2">
-                          <h5 className="text-sm font-medium">Summary</h5>
+                          <h5 className="text-sm font-medium">ملخص</h5>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="bg-muted/30 p-3 rounded-md">
-                              <div className="text-xs text-muted-foreground mb-1">Total Queries</div>
+                              <div className="text-xs text-muted-foreground mb-1">إجمالي الاستعلامات</div>
                               <div className="text-lg font-semibold">{report.summary.totalQueries}</div>
                             </div>
                             <div className="bg-muted/30 p-3 rounded-md">
-                              <div className="text-xs text-muted-foreground mb-1">Success Rate</div>
+                              <div className="text-xs text-muted-foreground mb-1">معدل النجاح</div>
                               <div className="text-lg font-semibold">{report.summary.successRate}</div>
                             </div>
                             <div className="bg-muted/30 p-3 rounded-md">
-                              <div className="text-xs text-muted-foreground mb-1">Number Count</div>
+                              <div className="text-xs text-muted-foreground mb-1">عدد الأرقام</div>
                               <div className="text-lg font-semibold">{report.summary.numberCount}</div>
                             </div>
                           </div>
                           <div className="text-xs text-muted-foreground mt-2">
-                            Period: {formatDate(report.summary.periodFrom)} - {formatDate(report.summary.periodTo)}
+                            الفترة: {formatDate(report.summary.periodFrom)} - {formatDate(report.summary.periodTo)}
                           </div>
                         </div>
                         
                         {/* Details Section */}
                         <div className="space-y-2">
-                          <h5 className="text-sm font-medium">Details by Number</h5>
+                          <h5 className="text-sm font-medium">التفاصيل حسب الرقم</h5>
                           <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                               <thead>
                                 <tr className="border-b border-border">
-                                  <th className="py-2 px-3 text-left font-medium">Number</th>
-                                  <th className="py-2 px-3 text-left font-medium">Queries</th>
-                                  <th className="py-2 px-3 text-left font-medium">Success</th>
-                                  <th className="py-2 px-3 text-left font-medium">Avg. ADSL</th>
-                                  <th className="py-2 px-3 text-left font-medium">Avg. Forge</th>
-                                  <th className="py-2 px-3 text-left font-medium">Latest ADSL</th>
-                                  <th className="py-2 px-3 text-left font-medium">Latest Forge</th>
+                                  <th className="py-2 px-3 text-right font-medium">الرقم</th>
+                                  <th className="py-2 px-3 text-right font-medium">الاستعلامات</th>
+                                  <th className="py-2 px-3 text-right font-medium">النجاح</th>
+                                  <th className="py-2 px-3 text-right font-medium">متوسط ADSL</th>
+                                  <th className="py-2 px-3 text-right font-medium">متوسط Forge</th>
+                                  <th className="py-2 px-3 text-right font-medium">آخر ADSL</th>
+                                  <th className="py-2 px-3 text-right font-medium">آخر Forge</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -342,11 +342,11 @@ const ReportsPanel = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Report</DialogTitle>
+            <DialogTitle>حذف التقرير</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the report{' '}
-              <span className="font-medium">{reportToDelete?.title}</span>?
-              This action cannot be undone.
+              هل أنت متأكد من رغبتك في حذف التقرير{' '}
+              <span className="font-medium">{reportToDelete?.title}</span>؟
+              لا يمكن التراجع عن هذا الإجراء.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -354,13 +354,13 @@ const ReportsPanel = () => {
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button
               variant="destructive"
               onClick={handleConfirmDelete}
             >
-              Delete
+              حذف
             </Button>
           </DialogFooter>
         </DialogContent>

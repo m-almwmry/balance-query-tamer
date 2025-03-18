@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
 
 const Login = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -16,11 +17,15 @@ const Login = () => {
   }, [isAuthenticated, isLoading, navigate]);
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 p-4 transition-colors duration-300">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-[30%] -left-[10%] w-[500px] h-[500px] bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
-        <div className="absolute top-[20%] -right-[10%] w-[600px] h-[600px] bg-sky-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
-        <div className="absolute -bottom-[10%] left-[20%] w-[400px] h-[400px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+        <div className="absolute -top-[30%] -left-[10%] w-[500px] h-[500px] bg-blue-100 dark:bg-blue-950/30 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+        <div className="absolute top-[20%] -right-[10%] w-[600px] h-[600px] bg-sky-100 dark:bg-sky-950/30 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+        <div className="absolute -bottom-[10%] left-[20%] w-[400px] h-[400px] bg-indigo-100 dark:bg-indigo-950/30 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+      </div>
+      
+      <div className="absolute top-4 left-4">
+        <ThemeToggle />
       </div>
       
       <motion.div 
