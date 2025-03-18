@@ -31,9 +31,9 @@ const AnimatedCard = ({
       }}
       className={cn(
         'rounded-xl border border-border p-6',
-        glass ? 'glass' : 'bg-card text-card-foreground',
-        hoverEffect && 'transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]',
-        rtl && 'rtl text-right',
+        glass ? 'bg-background/80 backdrop-blur-sm' : 'bg-card text-card-foreground',
+        hoverEffect && 'transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]',
+        rtl && 'text-right',
         className
       )}
       dir={rtl ? "rtl" : "ltr"}
