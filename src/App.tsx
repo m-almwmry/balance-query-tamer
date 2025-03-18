@@ -21,17 +21,19 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <div dir="rtl" className="font-cairo">
-        <style jsx global>{`
-          @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
-          
-          :root {
-            --font-cairo: 'Cairo', sans-serif;
-          }
-          
-          body {
-            font-family: var(--font-cairo);
-          }
-        `}</style>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
+            
+            :root {
+              --font-cairo: 'Cairo', sans-serif;
+            }
+            
+            body {
+              font-family: var(--font-cairo);
+            }
+          `
+        }} />
         <Toaster />
         <Sonner />
         <MotionConfig 
