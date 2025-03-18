@@ -13,6 +13,7 @@ interface NumberInputProps {
   error?: string;
   required?: boolean;
   id?: string;
+  dir?: "rtl" | "ltr";
 }
 
 const NumberInput = ({
@@ -24,6 +25,7 @@ const NumberInput = ({
   error,
   required = false,
   id,
+  dir = "rtl",
 }: NumberInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -33,7 +35,7 @@ const NumberInput = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" dir={dir}>
       {label && (
         <Label htmlFor={id} className="font-medium">
           {label} {required && <span className="text-destructive">*</span>}
@@ -47,6 +49,7 @@ const NumberInput = ({
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
+        dir={dir}
         className={cn(
           "transition-all duration-200",
           error && "border-destructive focus-visible:ring-destructive",

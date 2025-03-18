@@ -9,6 +9,7 @@ interface AnimatedCardProps {
   delay?: number;
   glass?: boolean;
   hoverEffect?: boolean;
+  rtl?: boolean;
 }
 
 const AnimatedCard = ({
@@ -17,6 +18,7 @@ const AnimatedCard = ({
   delay = 0,
   glass = false,
   hoverEffect = true,
+  rtl = true,
 }: AnimatedCardProps) => {
   return (
     <motion.div
@@ -31,8 +33,10 @@ const AnimatedCard = ({
         'rounded-xl border border-border p-6',
         glass ? 'glass' : 'bg-card text-card-foreground',
         hoverEffect && 'transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]',
+        rtl && 'rtl text-right',
         className
       )}
+      dir={rtl ? "rtl" : "ltr"}
     >
       {children}
     </motion.div>

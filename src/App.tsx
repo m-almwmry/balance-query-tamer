@@ -20,28 +20,30 @@ import { MotionConfig } from "framer-motion";
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <MotionConfig 
-        reducedMotion="user"
-        transition={{
-          type: "spring",
-          bounce: 0.15
-        }}
-      >
-        <AuthProvider>
-          <BrowserRouter>
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AnimatePresence>
-          </BrowserRouter>
-        </AuthProvider>
-      </MotionConfig>
+      <div dir="rtl" className="font-cairo">
+        <Toaster />
+        <Sonner />
+        <MotionConfig 
+          reducedMotion="user"
+          transition={{
+            type: "spring",
+            bounce: 0.15
+          }}
+        >
+          <AuthProvider>
+            <BrowserRouter>
+              <AnimatePresence mode="wait">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AnimatePresence>
+            </BrowserRouter>
+          </AuthProvider>
+        </MotionConfig>
+      </div>
     </TooltipProvider>
   </QueryClientProvider>
 );

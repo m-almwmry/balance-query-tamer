@@ -35,9 +35,9 @@ const Login = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Balance Query System</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">نظام استعلام الرصيد</h1>
           <p className="text-muted-foreground text-lg max-w-xl">
-            Monitor your ADSL and Yemen Forge balances with automated queries
+            مراقبة أرصدة ADSL و Yemen Forge مع استعلامات آلية
           </p>
         </motion.div>
         
