@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { generateId } from '@/lib/utils';
@@ -15,6 +14,8 @@ export interface ApiConfig {
 export interface UserConfig {
   id: string;
   username: string;
+  password?: string; // Added password field
+  email?: string;    // Added email field
   maxNumbers: number;
   sessionLength: number; // in hours
   isActive: boolean;
@@ -73,7 +74,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
   const [queryInterval, setQueryInterval] = useState<number>(60); // 60 minutes
   const [reportInterval, setReportInterval] = useState<number>(24); // 24 hours
 
-  // Load saved configurations on initial load
   useEffect(() => {
     const savedApiConfigs = localStorage.getItem('apiConfigs');
     const savedUserConfigs = localStorage.getItem('userConfigs');
@@ -100,7 +100,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     if (savedNumbers) {
       try {
         const parsedNumbers = JSON.parse(savedNumbers);
-        // Convert string dates to Date objects
         parsedNumbers.forEach((number: any) => {
           number.createdAt = new Date(number.createdAt);
         });
@@ -127,7 +126,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     }
   }, []);
 
-  // Save configurations when they change
   useEffect(() => {
     localStorage.setItem('apiConfigs', JSON.stringify(apiConfigs));
   }, [apiConfigs]);
@@ -148,7 +146,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     localStorage.setItem('reportInterval', reportInterval.toString());
   }, [reportInterval]);
 
-  // API configuration functions
   const addApiConfig = (config: Omit<ApiConfig, 'id'>) => {
     const newConfig = { ...config, id: generateId() };
     setApiConfigs(prev => [...prev, newConfig]);
@@ -179,13 +176,12 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     });
   };
 
-  // User configuration functions
   const addUserConfig = (config: Omit<UserConfig, 'id'>) => {
     const newConfig = { ...config, id: generateId() };
     setUserConfigs(prev => [...prev, newConfig]);
     toast({
-      title: "User configuration added",
-      description: `${config.username} has been added with a limit of ${config.maxNumbers} numbers.`,
+      title: "تمت إضافة إعدادات المستخدم",
+      description: `تم إضافة ${config.username} إلى إعدادات المستخدم.`,
     });
   };
 
@@ -210,7 +206,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     });
   };
 
-  // Number management functions
   const addNumber = (number: Omit<NumberEntry, 'id' | 'createdAt'>) => {
     const newNumber = { 
       ...number, 
@@ -246,7 +241,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     });
   };
 
-  // Interval management
   const handleSetQueryInterval = (interval: number) => {
     setQueryInterval(interval);
     toast({
@@ -263,7 +257,6 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
     });
   };
 
-  // Helper functions
   const getUserNumbers = (userId: string) => {
     return numbers.filter(number => number.userId === userId);
   };

@@ -148,7 +148,14 @@ const UserManagementPanel = () => {
       return;
     }
 
-    updateUserConfig(editingId, editUser);
+    updateUserConfig(editingId, {
+      username: editUser.username,
+      maxNumbers: editUser.maxNumbers,
+      sessionLength: editUser.sessionLength,
+      isActive: editUser.isActive,
+      email: editUser.email || undefined,
+      password: editUser.password || undefined
+    });
     setEditingId(null);
     
     toast({
