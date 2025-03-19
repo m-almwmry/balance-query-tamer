@@ -1,17 +1,12 @@
+
 import React from 'react';
-import { Metadata } from 'next';
-import { Overview } from '@/components/dashboard/Overview';
-import { generateId } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Overview } from '@/components/dashboard/Overview';
 import { ApiManagementPanel } from '@/components/dashboard/ApiManagementPanel';
 import { UserManagementPanel } from '@/components/dashboard/users';
 import { NumberManagementPanel } from '@/components/dashboard/NumberManagementPanel';
 import { SettingsPanel } from '@/components/dashboard/SettingsPanel';
 import AnimatedCard from '@/components/ui/AnimatedCard';
-
-export const metadata: Metadata = {
-  title: 'Dashboard',
-};
 
 const Dashboard = () => {
   return (
