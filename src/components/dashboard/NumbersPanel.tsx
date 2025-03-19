@@ -18,6 +18,7 @@ import {
   DialogDescription,
   DialogFooter
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 const NumbersPanel = () => {
   const { user } = useAuth();
@@ -39,13 +40,22 @@ const NumbersPanel = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [numberToDelete, setNumberToDelete] = useState<NumberEntry | null>(null);
 
-  const userNumbers = user ? getUserNumbers(user.id) : [];
-  const numberCount = user ? getNumberCount(user.id) : 0;
-  const atLimit = user ? isUserAtNumberLimit(user.id) : true;
+  // Ensure user is defined
+  if (!user) {
+    return (
+      <AnimatedCard className="p-6">
+        <div className="text-center py-8 text-muted-foreground">
+          الرجاء تسجيل الدخول لإدارة الأرقام الخاصة بك.
+        </div>
+      </AnimatedCard>
+    );
+  }
+
+  const userNumbers = getUserNumbers(user.id);
+  const numberCount = getNumberCount(user.id);
+  const atLimit = isUserAtNumberLimit(user.id);
 
   const handleAddNumber = () => {
-    if (!user) return;
-    
     if (!newNumber) {
       toast({
         title: "الإدخال مطلوب",
@@ -64,6 +74,7 @@ const NumbersPanel = () => {
       return;
     }
 
+    // Add the number with the current user ID
     addNumber({
       number: newNumber,
       description: newDescription,
@@ -71,8 +82,14 @@ const NumbersPanel = () => {
       isActive: true,
     });
 
+    // Clear form
     setNewNumber('');
     setNewDescription('');
+    
+    toast({
+      title: "تمت الإضافة",
+      description: "تم إضافة الرقم بنجاح",
+    });
   };
 
   const handleEdit = (number: NumberEntry) => {
@@ -98,6 +115,11 @@ const NumbersPanel = () => {
       description: editDescription,
     });
 
+    toast({
+      title: "تم التحديث",
+      description: "تم تحديث الرقم بنجاح",
+    });
+
     setEditingId(null);
     setEditNumber('');
     setEditDescription('');
@@ -119,11 +141,21 @@ const NumbersPanel = () => {
       deleteNumber(numberToDelete.id);
       setDeleteDialogOpen(false);
       setNumberToDelete(null);
+      
+      toast({
+        title: "تم الحذف",
+        description: "تم حذف الرقم بنجاح",
+      });
     }
   };
 
   const handleToggleActive = (id: string, currentState: boolean) => {
     updateNumber(id, { isActive: !currentState });
+    
+    toast({
+      title: currentState ? "تم الإيقاف" : "تم التنشيط",
+      description: currentState ? "تم إيقاف الرقم بنجاح" : "تم تنشيط الرقم بنجاح",
+    });
   };
 
   return (
@@ -321,11 +353,6 @@ const NumbersPanel = () => {
       </Dialog>
     </AnimatedCard>
   );
-};
-
-// Helper function for conditional classes
-const cn = (...classes: (string | boolean | undefined)[]) => {
-  return classes.filter(Boolean).join(' ');
 };
 
 export default NumbersPanel;

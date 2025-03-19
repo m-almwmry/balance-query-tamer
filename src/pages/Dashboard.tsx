@@ -60,8 +60,8 @@ const Dashboard = () => {
     }
   }, [isRunning, nextQueryTime]);
 
-  // Dashboard components
-  const DashboardContent = () => {
+  // Control Panel component - only visible to admins
+  const ControlPanel = () => {
     const { 
       numbers, 
       apiConfigs, 
@@ -81,15 +81,15 @@ const Dashboard = () => {
         setNextQueryTime(null);
         
         toast({
-          title: "Automatic queries stopped",
-          description: "Automatic balance queries have been stopped.",
+          title: "تم إيقاف الاستعلامات",
+          description: "تم إيقاف الاستعلامات التلقائية عن الرصيد.",
         });
       } else {
         // Start queries
         if (apiConfigs.length < 2) {
           toast({
-            title: "Configuration required",
-            description: "You need to configure both ADSL and Yemen Forge API settings before starting automatic queries.",
+            title: "الإعداد مطلوب",
+            description: "تحتاج إلى تكوين إعدادات كل من ADSL و Yemen Forge API قبل بدء الاستعلامات التلقائية.",
             variant: "destructive",
           });
           return;
@@ -97,8 +97,8 @@ const Dashboard = () => {
         
         if (getActiveNumbers().length === 0) {
           toast({
-            title: "No active numbers",
-            description: "You need to add at least one active number before starting automatic queries.",
+            title: "لا توجد أرقام نشطة",
+            description: "تحتاج إلى إضافة رقم نشط واحد على الأقل قبل بدء الاستعلامات التلقائية.",
             variant: "destructive",
           });
           return;
@@ -114,8 +114,8 @@ const Dashboard = () => {
         
         if (!adslConfig || !forgeConfig) {
           toast({
-            title: "API configuration required",
-            description: "You need active configurations for both ADSL and Yemen Forge APIs.",
+            title: "تكوين API مطلوب",
+            description: "تحتاج إلى تكوينات نشطة لكل من ADSL و Yemen Forge APIs.",
             variant: "destructive",
           });
           return;
@@ -144,15 +144,15 @@ const Dashboard = () => {
             setNextQueryTime(next);
             
             toast({
-              title: "Query completed",
-              description: `Queried ${results.length} numbers successfully.`,
+              title: "اكتمل الاستعلام",
+              description: `تم الاستعلام عن ${results.length} أرقام بنجاح.`,
             });
           },
           (report) => {
             console.log("Report generated:", report);
             toast({
-              title: "Report generated",
-              description: "A new balance report has been generated.",
+              title: "تم إنشاء التقرير",
+              description: "تم إنشاء تقرير رصيد جديد.",
             });
           }
         );
@@ -160,8 +160,8 @@ const Dashboard = () => {
         setIsRunning(true);
         
         toast({
-          title: "Automatic queries started",
-          description: `Querying ${getActiveNumbers().length} numbers every ${queryInterval} minutes.`,
+          title: "بدأت الاستعلامات التلقائية",
+          description: `استعلام عن ${getActiveNumbers().length} أرقام كل ${queryInterval} دقائق.`,
         });
       }
     };
@@ -170,8 +170,8 @@ const Dashboard = () => {
     const handleManualQuery = async () => {
       if (apiConfigs.length < 2) {
         toast({
-          title: "Configuration required",
-          description: "You need to configure both ADSL and Yemen Forge API settings.",
+          title: "الإعداد مطلوب",
+          description: "تحتاج إلى تكوين إعدادات كل من ADSL و Yemen Forge API.",
           variant: "destructive",
         });
         return;
@@ -179,8 +179,8 @@ const Dashboard = () => {
       
       if (getActiveNumbers().length === 0) {
         toast({
-          title: "No active numbers",
-          description: "You need to add at least one active number.",
+          title: "لا توجد أرقام نشطة",
+          description: "تحتاج إلى إضافة رقم نشط واحد على الأقل.",
           variant: "destructive",
         });
         return;
@@ -196,8 +196,8 @@ const Dashboard = () => {
       
       if (!adslConfig || !forgeConfig) {
         toast({
-          title: "API configuration required",
-          description: "You need active configurations for both ADSL and Yemen Forge APIs.",
+          title: "تكوين API مطلوب",
+          description: "تحتاج إلى تكوينات نشطة لكل من ADSL و Yemen Forge APIs.",
           variant: "destructive",
         });
         return;
@@ -215,14 +215,14 @@ const Dashboard = () => {
         setLastQueryTime(new Date());
         
         toast({
-          title: "Query completed",
-          description: `Queried ${results.length} numbers successfully.`,
+          title: "اكتمل الاستعلام",
+          description: `تم الاستعلام عن ${results.length} أرقام بنجاح.`,
         });
       } catch (error) {
         console.error("Manual query error:", error);
         toast({
-          title: "Query failed",
-          description: "An error occurred during the query.",
+          title: "فشل الاستعلام",
+          description: "حدث خطأ أثناء الاستعلام.",
           variant: "destructive",
         });
       } finally {
@@ -232,31 +232,22 @@ const Dashboard = () => {
 
     // Format time remaining
     const formatTimeRemaining = () => {
-      if (!nextQueryTime) return "Not scheduled";
+      if (!nextQueryTime) return "غير مجدول";
       
       const now = new Date();
       const diffMs = nextQueryTime.getTime() - now.getTime();
       
-      if (diffMs <= 0) return "Querying...";
+      if (diffMs <= 0) return "جاري الاستعلام...";
       
       const diffSecs = Math.floor(diffMs / 1000);
       const minutes = Math.floor(diffSecs / 60);
       const seconds = diffSecs % 60;
       
-      return `${minutes}m ${seconds}s`;
+      return `${minutes}د ${seconds}ث`;
     };
 
     return (
       <div className="space-y-6">
-        <motion.h1 
-          className="text-3xl font-bold"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          Dashboard
-        </motion.h1>
-        
         {/* Control Panel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -266,7 +257,7 @@ const Dashboard = () => {
           <Card className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Query Control</h2>
+                <h2 className="text-xl font-semibold">التحكم بالاستعلامات</h2>
                 
                 <div className="flex gap-4">
                   <Button
@@ -276,13 +267,13 @@ const Dashboard = () => {
                   >
                     {isRunning ? (
                       <>
-                        <Pause size={16} className="mr-2" />
-                        Stop Queries
+                        <Pause size={16} className="ml-2" />
+                        إيقاف الاستعلامات
                       </>
                     ) : (
                       <>
-                        <Play size={16} className="mr-2" />
-                        Start Automatic Queries
+                        <Play size={16} className="ml-2" />
+                        بدء الاستعلامات التلقائية
                       </>
                     )}
                   </Button>
@@ -295,13 +286,13 @@ const Dashboard = () => {
                   >
                     {isQuerying ? (
                       <>
-                        <RefreshCw size={16} className="mr-2 animate-spin" />
-                        Querying...
+                        <RefreshCw size={16} className="ml-2 animate-spin" />
+                        جاري الاستعلام...
                       </>
                     ) : (
                       <>
-                        <RefreshCw size={16} className="mr-2" />
-                        Run Query Now
+                        <RefreshCw size={16} className="ml-2" />
+                        تشغيل الاستعلام الآن
                       </>
                     )}
                   </Button>
@@ -309,38 +300,38 @@ const Dashboard = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="text-sm font-medium">Query Status</div>
+                    <div className="text-sm font-medium">حالة الاستعلام</div>
                     <div className="flex items-center">
                       <StatusIndicator 
                         status={isRunning ? "online" : "offline"} 
-                        text={isRunning ? "Running" : "Stopped"} 
+                        text={isRunning ? "قيد التشغيل" : "متوقف"} 
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <div className="text-sm font-medium">Next Query</div>
+                    <div className="text-sm font-medium">الاستعلام التالي</div>
                     <div className="flex items-center">
-                      <Clock size={16} className="mr-2 text-muted-foreground" />
-                      <span>{isRunning ? formatTimeRemaining() : "Not scheduled"}</span>
+                      <Clock size={16} className="ml-2 text-muted-foreground" />
+                      <span>{isRunning ? formatTimeRemaining() : "غير مجدول"}</span>
                     </div>
                   </div>
                 </div>
                 
                 {lastQueryTime && (
                   <div className="text-sm text-muted-foreground">
-                    Last query: {lastQueryTime.toLocaleTimeString()}
+                    آخر استعلام: {lastQueryTime.toLocaleTimeString()}
                   </div>
                 )}
               </div>
               
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Statistics</h2>
+                <h2 className="text-xl font-semibold">الإحصائيات</h2>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <Card className="p-4 bg-muted/10">
                     <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm font-medium">Active Numbers</div>
+                      <div className="text-sm font-medium">الأرقام النشطة</div>
                       <PhoneCall size={16} className="text-muted-foreground" />
                     </div>
                     <div className="text-2xl font-bold">{getActiveNumbers().length}</div>
@@ -348,7 +339,7 @@ const Dashboard = () => {
                   
                   <Card className="p-4 bg-muted/10">
                     <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm font-medium">API Endpoints</div>
+                      <div className="text-sm font-medium">نقاط API</div>
                       <Server size={16} className="text-muted-foreground" />
                     </div>
                     <div className="text-2xl font-bold">{apiConfigs.filter(c => c.isActive).length}</div>
@@ -356,18 +347,18 @@ const Dashboard = () => {
                   
                   <Card className="p-4 bg-muted/10">
                     <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm font-medium">Query Interval</div>
+                      <div className="text-sm font-medium">فترة الاستعلام</div>
                       <Clock size={16} className="text-muted-foreground" />
                     </div>
-                    <div className="text-2xl font-bold">{queryInterval}m</div>
+                    <div className="text-2xl font-bold">{queryInterval}د</div>
                   </Card>
                   
                   <Card className="p-4 bg-muted/10">
                     <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm font-medium">Report Interval</div>
+                      <div className="text-sm font-medium">فترة التقرير</div>
                       <BarChart4 size={16} className="text-muted-foreground" />
                     </div>
-                    <div className="text-2xl font-bold">{reportInterval}h</div>
+                    <div className="text-2xl font-bold">{reportInterval}س</div>
                   </Card>
                 </div>
               </div>
@@ -375,61 +366,121 @@ const Dashboard = () => {
           </Card>
         </motion.div>
         
-        {/* Interval Config */}
+        {/* Interval Config - only visible to admins */}
+        {isAdmin && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">إعدادات الفترات الزمنية</h2>
+              
+              <Tabs defaultValue="query">
+                <TabsList className="mb-4">
+                  <TabsTrigger value="query">فترة الاستعلام</TabsTrigger>
+                  <TabsTrigger value="report">فترة التقرير</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="query" className="space-y-4">
+                  <p className="text-muted-foreground">تعيين مدى تكرار استعلام النظام عن الأرصدة (بالدقائق).</p>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    {[15, 30, 60, 120, 240, 480].map((interval) => (
+                      <Button
+                        key={interval}
+                        variant={queryInterval === interval ? "default" : "outline"}
+                        onClick={() => setQueryInterval(interval)}
+                      >
+                        {interval} {interval === 60 ? "ساعة" : "دقيقة"}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground">
+                    الإعداد الحالي: استعلام كل {queryInterval} دقيقة
+                  </p>
+                </TabsContent>
+                
+                <TabsContent value="report" className="space-y-4">
+                  <p className="text-muted-foreground">تعيين مدى تكرار إنشاء النظام للتقارير (بالساعات).</p>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    {[6, 12, 24, 48, 72, 168].map((interval) => (
+                      <Button
+                        key={interval}
+                        variant={reportInterval === interval ? "default" : "outline"}
+                        onClick={() => setReportInterval(interval)}
+                      >
+                        {interval} {interval === 24 ? "يوم" : interval === 168 ? "أسبوع" : "ساعة"}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground">
+                    الإعداد الحالي: إنشاء تقارير كل {reportInterval} ساعة
+                  </p>
+                </TabsContent>
+              </Tabs>
+            </Card>
+          </motion.div>
+        )}
+      </div>
+    );
+  };
+
+  // Basic Dashboard content for normal users
+  const BasicDashboardContent = () => {
+    const { getActiveNumbers } = useConfig();
+    
+    return (
+      <div className="space-y-6">
+        <motion.h1 
+          className="text-3xl font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          لوحة التحكم
+        </motion.h1>
+        
+        {/* Simplified status for normal users */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4 }}
         >
           <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Interval Configuration</h2>
-            
-            <Tabs defaultValue="query">
-              <TabsList className="mb-4">
-                <TabsTrigger value="query">Query Interval</TabsTrigger>
-                <TabsTrigger value="report">Report Interval</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="query" className="space-y-4">
-                <p className="text-muted-foreground">Set how frequently the system should query balances (in minutes).</p>
-                
-                <div className="grid grid-cols-3 gap-2">
-                  {[15, 30, 60, 120, 240, 480].map((interval) => (
-                    <Button
-                      key={interval}
-                      variant={queryInterval === interval ? "default" : "outline"}
-                      onClick={() => setQueryInterval(interval)}
-                    >
-                      {interval} {interval === 60 ? "hour" : "minutes"}
-                    </Button>
-                  ))}
+            <h2 className="text-xl font-semibold mb-4">حالة الحساب</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="p-4 bg-muted/10">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="text-sm font-medium">الأرقام النشطة</div>
+                  <PhoneCall size={16} className="text-muted-foreground" />
                 </div>
-                
-                <p className="text-sm text-muted-foreground">
-                  Current setting: Query every {queryInterval} minutes
-                </p>
-              </TabsContent>
+                <div className="text-2xl font-bold">{getActiveNumbers().length}</div>
+              </Card>
               
-              <TabsContent value="report" className="space-y-4">
-                <p className="text-muted-foreground">Set how frequently the system should generate reports (in hours).</p>
-                
-                <div className="grid grid-cols-3 gap-2">
-                  {[6, 12, 24, 48, 72, 168].map((interval) => (
-                    <Button
-                      key={interval}
-                      variant={reportInterval === interval ? "default" : "outline"}
-                      onClick={() => setReportInterval(interval)}
-                    >
-                      {interval} {interval === 24 ? "day" : interval === 168 ? "week" : "hours"}
-                    </Button>
-                  ))}
+              <Card className="p-4 bg-muted/10">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="text-sm font-medium">حالة الاستعلام</div>
+                  <StatusIndicator 
+                    status={isRunning ? "online" : "offline"} 
+                    text={isRunning ? "قيد التشغيل" : "متوقف"} 
+                  />
                 </div>
-                
-                <p className="text-sm text-muted-foreground">
-                  Current setting: Generate reports every {reportInterval} hours
-                </p>
-              </TabsContent>
-            </Tabs>
+              </Card>
+              
+              {lastQueryTime && (
+                <Card className="p-4 bg-muted/10">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="text-sm font-medium">آخر استعلام</div>
+                    <Clock size={16} className="text-muted-foreground" />
+                  </div>
+                  <div className="text-md">{lastQueryTime.toLocaleTimeString()}</div>
+                </Card>
+              )}
+            </div>
           </Card>
         </motion.div>
       </div>
@@ -452,7 +503,7 @@ const Dashboard = () => {
         currentTab={currentTab} 
         onTabChange={setCurrentTab}
       >
-        {currentTab === 'dashboard' && <DashboardContent />}
+        {currentTab === 'dashboard' && (isAdmin ? <ControlPanel /> : <BasicDashboardContent />)}
         {currentTab === 'numbers' && <NumbersPanel />}
         {currentTab === 'api' && isAdmin && <APIConfigPanel />}
         {currentTab === 'users' && isAdmin && <UserManagementPanel />}
