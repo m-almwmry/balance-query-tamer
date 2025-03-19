@@ -8,9 +8,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useConfig } from '@/contexts/ConfigContext';
 
 const LoginForm = () => {
   const { login, isLoading } = useAuth();
+  const { config } = useConfig();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
