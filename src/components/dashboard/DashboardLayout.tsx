@@ -33,23 +33,35 @@ const DashboardLayout = ({
   const { user, logout, isAdmin } = useAuth();
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { id: 'numbers', label: 'Numbers', icon: <PhoneCall size={20} /> },
-    { id: 'api', label: 'API Config', icon: <Settings size={20} />, adminOnly: true },
-    { id: 'users', label: 'Users', icon: <Users size={20} />, adminOnly: true },
-    { id: 'reports', label: 'Reports', icon: <FileText size={20} /> },
+    { id: 'dashboard', label: 'لوحة التحكم', icon: <LayoutDashboard size={20} /> },
+    { id: 'numbers', label: 'الأرقام', icon: <PhoneCall size={20} /> },
+    { id: 'api', label: 'إعدادات API', icon: <Settings size={20} />, adminOnly: true },
+    { id: 'users', label: 'المستخدمون', icon: <Users size={20} />, adminOnly: true },
+    { id: 'reports', label: 'التقارير', icon: <FileText size={20} /> },
   ];
 
   const visibleTabs = tabs.filter(tab => !tab.adminOnly || isAdmin);
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
+      {/* Main Content */}
+      <div className={cn(
+        "flex-1 transition-all duration-300 ease-in-out",
+        collapsed ? "mr-[70px]" : "mr-64"
+      )}>
+        <div className="h-screen overflow-auto">
+          <main className="p-6">
+            {children}
+          </main>
+        </div>
+      </div>
+      
+      {/* Sidebar - now on the right */}
       <motion.div
         layout
         className={cn(
-          "h-screen flex flex-col bg-background border-r border-border",
-          "fixed z-30 transition-all duration-300 ease-in-out",
+          "h-screen flex flex-col bg-background border-l border-border",
+          "fixed right-0 z-30 transition-all duration-300 ease-in-out",
           collapsed ? "w-[70px]" : "w-64"
         )}
         initial={false}
@@ -63,17 +75,17 @@ const DashboardLayout = ({
               exit={{ opacity: 0 }}
               className="text-lg font-semibold"
             >
-              Balance Query
+              استعلام الرصيد
             </motion.h1>
           )}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? "توسيع الشريط الجانبي" : "طي الشريط الجانبي"}
             className="rounded-full w-8 h-8"
           >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {collapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
           </Button>
         </div>
 
@@ -94,7 +106,7 @@ const DashboardLayout = ({
               )}
               onClick={() => onTabChange(tab.id as Tab)}
             >
-              <span className={cn("mr-2", collapsed && "mr-0")}>{tab.icon}</span>
+              <span className={cn("ml-2", collapsed && "ml-0")}>{tab.icon}</span>
               {!collapsed && <span>{tab.label}</span>}
             </Button>
           ))}
@@ -105,38 +117,26 @@ const DashboardLayout = ({
           "p-4 border-t border-border",
           "flex items-center"
         )}>
-          <div className="flex-1 min-w-0">
-            {!collapsed && user && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium truncate">{user.username}</p>
-                <StatusIndicator status="online" text="Active" className="mt-1" />
-              </div>
-            )}
-          </div>
-
           <Button
             variant="ghost"
             size="icon"
             onClick={logout}
             className="rounded-full w-8 h-8"
-            aria-label="Log out"
+            aria-label="تسجيل الخروج"
           >
             <LogOut size={16} />
           </Button>
+          
+          <div className="flex-1 min-w-0 mr-2">
+            {!collapsed && user && (
+              <div className="space-y-1">
+                <p className="text-sm font-medium truncate">{user.username}</p>
+                <StatusIndicator status="online" text="نشط" className="mt-1" />
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
-
-      {/* Main Content */}
-      <div className={cn(
-        "flex-1 transition-all duration-300 ease-in-out",
-        collapsed ? "ml-[70px]" : "ml-64"
-      )}>
-        <div className="h-screen overflow-auto">
-          <main className="p-6">
-            {children}
-          </main>
-        </div>
-      </div>
     </div>
   );
 };

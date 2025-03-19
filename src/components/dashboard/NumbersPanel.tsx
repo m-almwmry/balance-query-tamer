@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash, Edit, Check, X, PlayCircle, PauseCircle } from 'lucide-react';

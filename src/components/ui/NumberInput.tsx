@@ -29,7 +29,7 @@ const NumberInput = ({
 }: NumberInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    // Based on API requirements, allow only digits and ensure at least 8 digits
+    // Allow only digits
     if (/^[0-9]*$/.test(newValue)) {
       onChange(newValue);
     }
@@ -52,7 +52,7 @@ const NumberInput = ({
         placeholder={placeholder}
         dir="ltr" // Keep numbers left-to-right even in RTL context
         className={cn(
-          "transition-all duration-200 text-right",
+          "transition-all duration-200",
           error && "border-destructive focus-visible:ring-destructive",
           className
         )}

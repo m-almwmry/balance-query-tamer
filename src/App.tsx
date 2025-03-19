@@ -20,7 +20,7 @@ import { MotionConfig } from "framer-motion";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
       <TooltipProvider>
         <div dir="rtl" className="font-cairo">
           <style dangerouslySetInnerHTML={{
@@ -33,6 +33,11 @@ const App = () => (
               
               body {
                 font-family: var(--font-cairo);
+              }
+
+              /* Force RTL for all inputs */
+              input, textarea {
+                text-align: right;
               }
             `
           }} />

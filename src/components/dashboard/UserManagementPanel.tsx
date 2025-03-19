@@ -1,11 +1,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash, Edit, Check, X, Clock } from 'lucide-react';
+import { Plus, Trash, Edit, Check, X, Clock, Eye, EyeOff, KeyRound, MailCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AnimatedCard from '@/components/ui/AnimatedCard';
-import NumberInput from '@/components/ui/NumberInput';
 import { useConfig, UserConfig } from '@/contexts/ConfigContext';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
@@ -26,17 +25,29 @@ const UserManagementPanel = () => {
   const [isAddingUser, setIsAddingUser] = useState(false);
   const [newUser, setNewUser] = useState({
     username: '',
+    password: '',
     maxNumbers: 5,
     sessionLength: 8,
     isActive: true,
+    email: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
+  const [userToResetPassword, setUserToResetPassword] = useState<UserConfig | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [recoveryEmailDialogOpen, setRecoveryEmailDialogOpen] = useState(false);
+  const [userToSendRecovery, setUserToSendRecovery] = useState<UserConfig | null>(null);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editUser, setEditUser] = useState({
     username: '',
+    password: '',
     maxNumbers: 5,
     sessionLength: 8,
     isActive: true,
+    email: '',
   });
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -45,11 +56,14 @@ const UserManagementPanel = () => {
   const resetNewUser = () => {
     setNewUser({
       username: '',
+      password: '',
       maxNumbers: 5,
       sessionLength: 8,
       isActive: true,
+      email: '',
     });
     setIsAddingUser(false);
+    setShowPassword(false);
   };
 
   const handleAddUser = () => {
@@ -57,6 +71,15 @@ const UserManagementPanel = () => {
       toast({
         title: "اسم المستخدم مطلوب",
         description: "الرجاء إدخال اسم مستخدم",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newUser.password) {
+      toast({
+        title: "كلمة المرور مطلوبة",
+        description: "الرجاء إدخال كلمة مرور",
         variant: "destructive",
       });
       return;
@@ -78,15 +101,22 @@ const UserManagementPanel = () => {
 
     addUserConfig(newUser);
     resetNewUser();
+    
+    toast({
+      title: "تمت الإضافة",
+      description: "تم إضافة المستخدم بنجاح",
+    });
   };
 
   const handleEdit = (user: UserConfig) => {
     setEditingId(user.id);
     setEditUser({
       username: user.username,
+      password: user.password || '',
       maxNumbers: user.maxNumbers,
       sessionLength: user.sessionLength,
       isActive: user.isActive,
+      email: user.email || '',
     });
   };
 
@@ -120,6 +150,11 @@ const UserManagementPanel = () => {
 
     updateUserConfig(editingId, editUser);
     setEditingId(null);
+    
+    toast({
+      title: "تم التحديث",
+      description: "تم تحديث المستخدم بنجاح",
+    });
   };
 
   const handleCancelEdit = () => {
@@ -136,11 +171,74 @@ const UserManagementPanel = () => {
       deleteUserConfig(userToDelete.id);
       setDeleteDialogOpen(false);
       setUserToDelete(null);
+      
+      toast({
+        title: "تم الحذف",
+        description: "تم حذف المستخدم بنجاح",
+      });
     }
   };
 
   const handleToggleActive = (id: string, currentState: boolean) => {
     updateUserConfig(id, { isActive: !currentState });
+    
+    toast({
+      title: currentState ? "تم تعطيل المستخدم" : "تم تفعيل المستخدم",
+      description: currentState ? "تم تعطيل المستخدم بنجاح" : "تم تفعيل المستخدم بنجاح",
+    });
+  };
+
+  const handleResetPasswordClick = (user: UserConfig) => {
+    setUserToResetPassword(user);
+    setNewPassword('');
+    setShowNewPassword(false);
+    setResetPasswordDialogOpen(true);
+  };
+
+  const handleResetPassword = () => {
+    if (!userToResetPassword || !newPassword) {
+      toast({
+        title: "كلمة المرور مطلوبة",
+        description: "الرجاء إدخال كلمة مرور جديدة",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    updateUserConfig(userToResetPassword.id, { password: newPassword });
+    setResetPasswordDialogOpen(false);
+    setUserToResetPassword(null);
+    setNewPassword('');
+    
+    toast({
+      title: "تم تغيير كلمة المرور",
+      description: "تم تغيير كلمة المرور بنجاح",
+    });
+  };
+
+  const handleSendPasswordRecoveryClick = (user: UserConfig) => {
+    setUserToSendRecovery(user);
+    setRecoveryEmailDialogOpen(true);
+  };
+
+  const handleSendPasswordRecovery = () => {
+    if (!userToSendRecovery || !userToSendRecovery.email) {
+      toast({
+        title: "البريد الإلكتروني مطلوب",
+        description: "المستخدم ليس لديه بريد إلكتروني مسجل",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // In a real implementation, you would send a password reset email here
+    toast({
+      title: "تم إرسال رابط استعادة كلمة المرور",
+      description: `تم إرسال رابط استعادة كلمة المرور إلى ${userToSendRecovery.email}`,
+    });
+    
+    setRecoveryEmailDialogOpen(false);
+    setUserToSendRecovery(null);
   };
 
   return (
@@ -167,7 +265,7 @@ const UserManagementPanel = () => {
           >
             <h3 className="text-sm font-medium mb-3">إضافة مستخدم جديد</h3>
             <div className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="username" className="font-medium">
                     اسم المستخدم <span className="text-destructive">*</span>
@@ -178,6 +276,42 @@ const UserManagementPanel = () => {
                     value={newUser.username}
                     onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                   />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="font-medium">
+                    البريد الإلكتروني
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="أدخل البريد الإلكتروني"
+                    value={newUser.email}
+                    onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="password" className="font-medium">
+                  كلمة المرور <span className="text-destructive">*</span>
+                </label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="أدخل كلمة المرور"
+                    value={newUser.password}
+                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 h-8 w-8"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </Button>
                 </div>
               </div>
               
@@ -232,11 +366,11 @@ const UserManagementPanel = () => {
 
         {/* Users List */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">المستخدمون المكونون</h3>
+          <h3 className="text-sm font-medium">المستخدمون المسجلون</h3>
           
           {userConfigs.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-border">
-              لا توجد تكوينات مستخدمين حتى الآن. أضف أول مستخدم باستخدام الزر أعلاه.
+              لا توجد مستخدمين مسجلين حتى الآن. أضف أول مستخدم باستخدام الزر أعلاه.
             </div>
           ) : (
             <motion.div
@@ -269,7 +403,7 @@ const UserManagementPanel = () => {
                   {editingId === config.id ? (
                     // Edit Mode
                     <div className="space-y-4">
-                      <div className="grid grid-cols-1 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label htmlFor={`edit-username-${config.id}`} className="font-medium">
                             اسم المستخدم <span className="text-destructive">*</span>
@@ -278,6 +412,18 @@ const UserManagementPanel = () => {
                             id={`edit-username-${config.id}`}
                             value={editUser.username}
                             onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label htmlFor={`edit-email-${config.id}`} className="font-medium">
+                            البريد الإلكتروني
+                          </label>
+                          <Input
+                            id={`edit-email-${config.id}`}
+                            type="email"
+                            value={editUser.email}
+                            onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+                            placeholder="البريد الإلكتروني للمستخدم"
                           />
                         </div>
                       </div>
@@ -350,36 +496,67 @@ const UserManagementPanel = () => {
                             <Clock size={14} className="ml-1" />
                             مدة الجلسة: {config.sessionLength} ساعات
                           </div>
+                          {config.email && (
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <MailCheck size={14} className="ml-1" />
+                              {config.email}
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex gap-2 mt-2 md:mt-0">
+                      <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
                         <Button
-                          size="icon"
+                          size="sm"
                           variant="outline"
-                          onClick={() => handleToggleActive(config.id, config.isActive)}
-                          className={cn(
-                            "h-8 w-8 rounded-full",
-                            config.isActive ? "bg-primary text-primary-foreground" : ""
-                          )}
+                          onClick={() => handleResetPasswordClick(config)}
+                          className="h-8"
                         >
-                          {config.isActive ? <Check size={16} /> : <X size={16} />}
+                          <KeyRound size={14} className="ml-1" />
+                          تغيير كلمة المرور
                         </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => handleEdit(config)}
-                          className="h-8 w-8 rounded-full"
-                        >
-                          <Edit size={16} />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => handleDeleteClick(config)}
-                          className="h-8 w-8 rounded-full text-destructive hover:text-destructive"
-                        >
-                          <Trash size={16} />
-                        </Button>
+                        
+                        {config.email && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleSendPasswordRecoveryClick(config)}
+                            className="h-8"
+                          >
+                            <MailCheck size={14} className="ml-1" />
+                            استعادة كلمة المرور
+                          </Button>
+                        )}
+                        
+                        <div className="flex gap-1">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleToggleActive(config.id, config.isActive)}
+                            className={cn(
+                              "h-8 w-8 rounded-full",
+                              config.isActive ? "bg-primary text-primary-foreground" : ""
+                            )}
+                            title={config.isActive ? "تعطيل المستخدم" : "تفعيل المستخدم"}
+                          >
+                            {config.isActive ? <Check size={16} /> : <X size={16} />}
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleEdit(config)}
+                            className="h-8 w-8 rounded-full"
+                          >
+                            <Edit size={16} />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleDeleteClick(config)}
+                            className="h-8 w-8 rounded-full text-destructive hover:text-destructive"
+                          >
+                            <Trash size={16} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -413,6 +590,93 @@ const UserManagementPanel = () => {
               onClick={handleConfirmDelete}
             >
               حذف
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetPasswordDialogOpen} onOpenChange={setResetPasswordDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>تغيير كلمة المرور</DialogTitle>
+            <DialogDescription>
+              أدخل كلمة المرور الجديدة للمستخدم{' '}
+              <span className="font-medium">{userToResetPassword?.username}</span>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label htmlFor="new-password" className="font-medium">
+                كلمة المرور الجديدة <span className="text-destructive">*</span>
+              </label>
+              <div className="relative">
+                <Input
+                  id="new-password"
+                  type={showNewPassword ? "text" : "password"}
+                  placeholder="أدخل كلمة المرور الجديدة"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 h-8 w-8"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                >
+                  {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </Button>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setResetPasswordDialogOpen(false)}
+            >
+              إلغاء
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleResetPassword}
+              disabled={!newPassword}
+            >
+              تغيير كلمة المرور
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Password Recovery Dialog */}
+      <Dialog open={recoveryEmailDialogOpen} onOpenChange={setRecoveryEmailDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>استعادة كلمة المرور</DialogTitle>
+            <DialogDescription>
+              سيتم إرسال رابط استعادة كلمة المرور إلى البريد الإلكتروني المسجل للمستخدم{' '}
+              <span className="font-medium">{userToSendRecovery?.username}</span>
+              {userToSendRecovery?.email && (
+                <>
+                  {' '}<br />
+                  <span className="font-medium mt-2 block">{userToSendRecovery.email}</span>
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setRecoveryEmailDialogOpen(false)}
+            >
+              إلغاء
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleSendPasswordRecovery}
+              disabled={!userToSendRecovery?.email}
+            >
+              إرسال رابط الاستعادة
             </Button>
           </DialogFooter>
         </DialogContent>
