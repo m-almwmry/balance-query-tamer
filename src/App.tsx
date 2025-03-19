@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ConfigProvider } from "@/contexts/ConfigContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -51,16 +52,18 @@ const App = () => (
             }}
           >
             <AuthProvider>
-              <BrowserRouter>
-                <AnimatePresence mode="wait">
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AnimatePresence>
-              </BrowserRouter>
+              <ConfigProvider>
+                <BrowserRouter>
+                  <AnimatePresence mode="wait">
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </AnimatePresence>
+                </BrowserRouter>
+              </ConfigProvider>
             </AuthProvider>
           </MotionConfig>
         </div>

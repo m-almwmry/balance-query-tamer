@@ -12,7 +12,9 @@ import { useConfig } from '@/contexts/ConfigContext';
 
 const LoginForm = () => {
   const { login, isLoading } = useAuth();
-  const config = useConfig(); // Fix: removing the destructuring since 'config' property doesn't exist
+  // يلاحظ أن useConfig() لا يعيد كائن به خاصية config
+  // بل يعيد الكائن نفسه مباشرة
+  const config = useConfig(); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
